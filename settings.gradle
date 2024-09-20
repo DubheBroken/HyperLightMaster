@@ -1,0 +1,24 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://mirrors.cloud.tencent.com/nexus/repository/maven-public/' }
+        maven { url 'https://repo.huaweicloud.com/repository/maven/' }
+        maven { url 'https://mirrors.ustc.edu.cn/repository/maven-public/' }
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://mirrors.cloud.tencent.com/nexus/repository/maven-public/' }
+        maven { url 'https://repo.huaweicloud.com/repository/maven/' }
+        maven { url 'https://mirrors.ustc.edu.cn/repository/maven-public/' }
+    }
+}
+rootProject.name = "HyperLightMaster"
+include ':app'
