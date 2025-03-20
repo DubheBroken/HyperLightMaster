@@ -6,6 +6,7 @@
     <application
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:name=".LightApplication"
         android:theme="@style/Theme.HyperLightMaster"
         tools:targetApi="31">
         <activity

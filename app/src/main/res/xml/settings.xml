@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 通知相关设置 -->
+    <PreferenceCategory android:title="通知设置">
+        <!-- 通知栏开关：开启后可以从通知中心控制亮度 -->
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="pref_notification_bar"
+            android:summary="开启后可以从通知中心控制亮度"
+            android:title="通知栏开关" />
+
+        <!-- 快捷图块开关：开启后在通知中心显示快捷图块，点击后调整亮度 -->
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="pref_quick_tile"
+            android:summary="开启后在通知中心显示快捷图块，点击后调整亮度"
+            android:title="快捷图块开关" />
+    </PreferenceCategory>
+
+    <!-- 亮度调节设置 -->
+    <PreferenceCategory android:title="亮度设置">
+        <!-- 最大亮度上限：横向滑动可调，点击后可直接输入整型数字（最大值从代码中传入） -->
+        <SeekBarPreference
+            android:defaultValue="80"
+            android:key="pref_max_brightness"
+            android:max="100"
+            android:summary="横向滑动操作，点击可直接输入"
+            android:title="最大亮度上限" />
+
+        <!-- 最小亮度下限：同上，不允许低于10 -->
+        <SeekBarPreference
+            android:defaultValue="10"
+            android:key="pref_min_brightness"
+            android:max="100"
+            android:min="10"
+            android:summary="最小亮度，不能低于10"
+            android:title="最小亮度下限" />
+    </PreferenceCategory>
+
+    <!-- 显示相关设置 -->
+    <PreferenceCategory android:title="显示设置">
+        <!-- 深色模式设置，下拉选单，选项：跟随系统、浅色、深色 -->
+        <ListPreference
+            android:defaultValue="system"
+            android:entries="@array/dark_mode_entries"
+            android:entryValues="@array/dark_mode_values"
+            android:key="pref_dark_mode"
+            android:summary="选择深色模式"
+            android:title="深色模式设置" />
+    </PreferenceCategory>
+
+    <!-- 关于信息 -->
+    <PreferenceCategory android:title="关于">
+        <!-- 联系作者：点击跳转浏览器 -->
+        <Preference
+            android:key="pref_contact_author"
+            android:summary="点击跳转浏览器"
+            android:title="联系作者" />
+
+        <!-- 检查更新：点击跳转浏览器，在 summary 中显示当前版本号 -->
+        <Preference
+            android:key="pref_check_update"
+            android:summary="当前版本：1.0.0"
+            android:title="检查更新" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
