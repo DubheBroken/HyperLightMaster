@@ -65,11 +65,7 @@ class ChangeLightFragment : BaseFragment<FragmentChangeLightBinding>() {
         val progressChange = (0 - distanceY).toInt() * 2 // 根据需要调整滑动速度
         var newProgress = (currentProgress - progressChange).coerceIn(viewModel.MIN_BRIGHTNESS, maxProgress)
 
-        if (viewModel.maxBrightnessValueFromLogic.value != null && newProgress > viewModel.maxBrightnessValueFromLogic.value!!) {
-            newProgress = viewModel.maxBrightnessValueFromLogic.value!!
-        } else if (viewModel.minBrightnessValueFromLogic.value != null && newProgress < viewModel.minBrightnessValueFromLogic.value!!) {
-            newProgress = viewModel.minBrightnessValueFromLogic.value!!
-        }
+        newProgress = viewModel.checkBrightness(newProgress)
 
         dataBinding.progressBar.progress = newProgress
         viewModel.writeBrightness(newProgress)

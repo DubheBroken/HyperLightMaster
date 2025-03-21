@@ -10,6 +10,7 @@ object DataUtil {
             const val QUICK_TILE_SWITCH = "QUICK_TILE_SWITCH"//快捷图块开关
             const val MAX_BRIGHTNESS_VALUE_FROM_LOGIC = "MAX_BRIGHTNESS_VALUE_FROM_LOGIC" //亮度条的最大亮度上限，用户定义
             const val MIN_BRIGHTNESS_VALUE_FROM_LOGIC = "MIN_BRIGHTNESS_VALUE_FROM_LOGIC" //亮度条的最小亮度下限，用户定义
+            const val MIN_MAX_SETUP_QUICK_TILE = "MIN_MAX_SETUP_QUICK_TILE"//快捷图块最大最小值限制开关
         }
     }
 
@@ -43,6 +44,14 @@ object DataUtil {
 
     fun getMinBrightnessValueFromLogic(): Int {
         return getIntData(MMKVKey.MIN_BRIGHTNESS_VALUE_FROM_LOGIC, 10)
+    }
+
+    fun saveMinMaxSetupQuickTile(value: Boolean) {
+        saveBooleanData(MMKVKey.MIN_MAX_SETUP_QUICK_TILE, value)
+    }
+
+    fun getMinMaxSetupQuickTile(): Boolean {
+        return getBooleanData(MMKVKey.MIN_MAX_SETUP_QUICK_TILE, false)
     }
 
     private fun saveBooleanData(key: String, value: Boolean) {

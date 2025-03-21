@@ -4,11 +4,12 @@
     package="com.dubhe.hyperlightmaster">
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.BIND_QUICK_SETTINGS_TILE" />
 
     <application
+        android:name=".LightApplication"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:name=".LightApplication"
         android:theme="@style/Theme.HyperLightMaster"
         tools:targetApi="31">
         <activity
@@ -21,6 +22,77 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name=".receiver.NotificationActionReceiver" />
+        <service
+            android:name=".service.MaxLightTileService"
+            android:exported="true"
+            android:icon="@drawable/icon_light"
+            android:label="最大亮度"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.service.quicksettings.ACTIVE_TILE"
+                android:value="true" />
+        </service>
+
+        <service
+            android:name=".service.MinLightTileService"
+            android:exported="true"
+            android:icon="@drawable/icon_light"
+            android:label="最小亮度"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.service.quicksettings.ACTIVE_TILE"
+                android:value="true" />
+        </service>
+
+        <service
+            android:name=".service.HalfLightTileService"
+            android:exported="true"
+            android:icon="@drawable/icon_light"
+            android:label="一半亮度"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.service.quicksettings.ACTIVE_TILE"
+                android:value="true" />
+        </service>
+
+        <service
+            android:name=".service.ThreeQuarterTileService"
+            android:exported="true"
+            android:icon="@drawable/icon_light"
+            android:label="75%亮度"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.service.quicksettings.ACTIVE_TILE"
+                android:value="true" />
+        </service>
+
+        <service
+            android:name=".service.OneQuarterTileService"
+            android:exported="true"
+            android:icon="@drawable/icon_light"
+            android:label="25%亮度"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.service.quicksettings.ACTIVE_TILE"
+                android:value="true" />
+        </service>
+
     </application>
 
 </manifest>

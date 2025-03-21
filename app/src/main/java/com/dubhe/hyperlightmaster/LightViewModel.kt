@@ -118,5 +118,15 @@ class LightViewModel : ViewModel() {
         process.waitFor()
         return result.toString().trim()
     }
+    
+    fun checkBrightness(brightness: Int): Int {
+        var br = brightness
+        if (maxBrightnessValueFromLogic.value != null && br > maxBrightnessValueFromLogic.value!!) {
+            br = maxBrightnessValueFromLogic.value!!
+        } else if (minBrightnessValueFromLogic.value != null && br < minBrightnessValueFromLogic.value!!) {
+            br = minBrightnessValueFromLogic.value!!
+        }
+        return br
+    }
 
 }

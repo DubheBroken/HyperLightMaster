@@ -12,10 +12,10 @@ import kotlinx.coroutines.launch
 class NotificationActionReceiver : BroadcastReceiver() {
 
     companion object {
-        val ACTION_NOTIFY_ON = "ACTION_NOTIFY_ON"
-        val ACTION_AUTO_BRIGHTNESS = "ACTION_AUTO_BRIGHTNESS"
-        val ACTION_READ_BRIGHTNESS = "ACTION_READ_BRIGHTNESS"
-        val ACTION_WRITE_BRIGHTNESS = "ACTION_WRITE_BRIGHTNESS"
+        val ACTION_NOTIFY_ON = "ACTION_NOTIFY_ON"//开/关 通知
+        val ACTION_AUTO_BRIGHTNESS = "ACTION_AUTO_BRIGHTNESS"//开/关 自动亮度
+        val ACTION_READ_BRIGHTNESS = "ACTION_READ_BRIGHTNESS"//读取当前亮度
+        val ACTION_WRITE_BRIGHTNESS = "ACTION_WRITE_BRIGHTNESS"//调整亮度
         val autoLightOn = "autoLightOn"
         val notifyOn = "notifyOn"
         val brightness = "brightness"

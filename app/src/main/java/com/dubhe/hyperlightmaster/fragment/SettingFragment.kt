@@ -17,6 +17,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SeekBarPreference
 import androidx.preference.SwitchPreferenceCompat
+import com.dubhe.hyperlightmaster.BuildConfig
 import com.dubhe.hyperlightmaster.LightApplication
 import com.dubhe.hyperlightmaster.R
 import com.dubhe.hyperlightmaster.util.DataUtil
@@ -41,12 +42,19 @@ class SettingsFragment : PreferenceFragmentCompat() {
             true
         }
 
+//        // 【快捷图块开关】事件处理
+//        val quickTilePref = findPreference<SwitchPreferenceCompat>("pref_quick_tile")
+//        quickTilePref?.setDefaultValue(LightApplication.instance.lightViewModel.autoBrightness.value)
+//        quickTilePref?.setOnPreferenceChangeListener { _, newValue ->
+//
+//            // 这里添加你要执行的逻辑
+//            true
+//        }
         // 【快捷图块开关】事件处理
-        val quickTilePref = findPreference<SwitchPreferenceCompat>("pref_quick_tile")
-        quickTilePref?.setDefaultValue(LightApplication.instance.lightViewModel.autoBrightness.value)
-        quickTilePref?.setOnPreferenceChangeListener { _, newValue ->
-
-            // 这里添加你要执行的逻辑
+        val prefMinMaxSetupQuickTile = findPreference<SwitchPreferenceCompat>("pref_min_max_setup_quick_tile")
+        prefMinMaxSetupQuickTile?.setDefaultValue(DataUtil.getMinMaxSetupQuickTile())
+        prefMinMaxSetupQuickTile?.setOnPreferenceChangeListener { _, newValue ->
+            DataUtil.saveMinMaxSetupQuickTile(newValue as Boolean)
             true
         }
 
@@ -121,6 +129,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         // 检查更新点击事件：打开浏览器访问更新页面，同时可动态更新 summary（例如当前版本号）
         val checkUpdatePref = findPreference<Preference>("pref_check_update")
+        checkUpdatePref?.title = "当前版本：${BuildConfig.VERSION_NAME}"
         checkUpdatePref?.setOnPreferenceClickListener {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/DubheBroken/HyperLightMaster/releases"))
             startActivity(intent)
