@@ -10,6 +10,7 @@
         android:name=".LightApplication"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:icon="@mipmap/ic_launcher"
         android:theme="@style/Theme.HyperLightMaster"
         tools:targetApi="31">
         <activity

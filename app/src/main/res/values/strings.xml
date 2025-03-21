@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HyperLightMaster</string>
+    <string name="app_name">Hyper亮度大师</string>
     <string name="tab_light">亮度</string>
     <string name="tab_info">指南</string>
     <string name="tab_setting">设置</string>
