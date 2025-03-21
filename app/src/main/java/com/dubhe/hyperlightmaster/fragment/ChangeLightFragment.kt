@@ -31,14 +31,24 @@ class ChangeLightFragment : BaseFragment<FragmentChangeLightBinding>() {
 
     @SuppressLint("NewApi", "ClickableViewAccessibility", "SetTextI18n")
     override fun initView() {
-        viewModel.brightness.observe(this, Observer {
+        viewModel.brightness.observe(this) {
             dataBinding.textLight.text = "当前亮度: $it"
-        })
+            dataBinding.progressBar.progress = it
+        }
 
-        dataBinding.textLightMax.text = "最大亮度: ${viewModel.MAX_BRIGHTNESS}"
-        dataBinding.progressBar.max = viewModel.MAX_BRIGHTNESS
-        dataBinding.progressBar.min = viewModel.MIN_BRIGHTNESS
-        dataBinding.progressBar.progress = viewModel.readBrightness()
+        viewModel.maxBrightnessValueFromLogic.observe(this){
+            dataBinding.progressBar.max = it
+            dataBinding.textLightMax.text = "最大亮度: ${LightApplication.instance.lightViewModel.maxBrightnessValueFromLogic.value}"
+            viewModel.brightness.value?.let {
+                dataBinding.progressBar.progress = it// 刷新一下进度条渲染
+            }
+        }
+        viewModel.minBrightnessValueFromLogic.observe(this){
+            dataBinding.progressBar.min = it
+            viewModel.brightness.value?.let {
+                dataBinding.progressBar.progress = it// 刷新一下进度条渲染
+            }
+        }
 
         dataBinding.constraintRoot.setOnTouchListener { _, event ->
             gestureDetector.onTouchEvent(event)
@@ -53,7 +63,13 @@ class ChangeLightFragment : BaseFragment<FragmentChangeLightBinding>() {
 
         // 上滑 distanceY 为负数，下滑为正数，所以需要反向
         val progressChange = (0 - distanceY).toInt() * 2 // 根据需要调整滑动速度
-        val newProgress = (currentProgress - progressChange).coerceIn(viewModel.MIN_BRIGHTNESS, maxProgress)
+        var newProgress = (currentProgress - progressChange).coerceIn(viewModel.MIN_BRIGHTNESS, maxProgress)
+
+        if (viewModel.maxBrightnessValueFromLogic.value != null && newProgress > viewModel.maxBrightnessValueFromLogic.value!!) {
+            newProgress = viewModel.maxBrightnessValueFromLogic.value!!
+        } else if (viewModel.minBrightnessValueFromLogic.value != null && newProgress < viewModel.minBrightnessValueFromLogic.value!!) {
+            newProgress = viewModel.minBrightnessValueFromLogic.value!!
+        }
 
         dataBinding.progressBar.progress = newProgress
         viewModel.writeBrightness(newProgress)

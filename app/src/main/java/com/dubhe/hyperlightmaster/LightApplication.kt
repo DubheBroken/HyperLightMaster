@@ -2,29 +2,36 @@ package com.dubhe.hyperlightmaster
 
 import android.app.Application
 import androidx.lifecycle.ViewModelProvider
+import com.dubhe.hyperlightmaster.util.DataUtil
+import com.tencent.mmkv.MMKV
+import kotlinx.coroutines.flow.MutableSharedFlow
+
+sealed class ViewModelEvent {
+    object ReadBrightness : ViewModelEvent()
+    data class WriteBrightness(val brightness: Int) : ViewModelEvent()
+    data class NotifyOn(val on: Boolean) : ViewModelEvent()
+    data class AutoBrightness(val on: Boolean) : ViewModelEvent()
+}
 
 class LightApplication: Application() {
 
     lateinit var lightViewModel: LightViewModel
+    // 用 SharedFlow 来作为事件总线
+    val viewModelEventFlow = MutableSharedFlow<ViewModelEvent>()
 
     companion object {
-        @JvmField
-        val TAG = LightApplication::class.simpleName
-        const val DATA_STATUS_未初始化 = 0
-        const val DATA_STATUS_初始化中 = 1
-        const val DATA_STATUS_已初始化 = 2
-        var initDataStatus = DATA_STATUS_未初始化
-
         lateinit var instance: LightApplication
     }
 
     override fun onCreate() {
         super.onCreate()
         instance = this
-        lightViewModel = ViewModelProvider.AndroidViewModelFactory(this)
-            .create(LightViewModel::class.java)
-        lightViewModel.initData()
-    }
+        MMKV.initialize(this)
+        lightViewModel = ViewModelProvider.AndroidViewModelFactory(this).create(LightViewModel::class.java)
 
+        if (DataUtil.getNotificationBarSwitch()) {
+            viewModelEventFlow.tryEmit(ViewModelEvent.NotifyOn(true))
+        }
+    }
 
 }

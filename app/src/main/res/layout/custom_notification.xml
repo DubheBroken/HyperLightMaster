@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <!-- 横向进度条（不可拖动，仅响应点击） -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/my_progressbar_style_ver"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:clickable="true"
+        android:max="100"
+        android:progress="50" />
+
+    <!-- 用于调节亮度的圆形按钮，显示字母“A” -->
+    <Button
+        android:id="@+id/buttonBrightness"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/circular_button_background"
+        android:text="A" />
+</LinearLayout>

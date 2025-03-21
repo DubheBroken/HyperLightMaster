@@ -5,7 +5,7 @@
     <PreferenceCategory android:title="通知设置">
         <!-- 通知栏开关：开启后可以从通知中心控制亮度 -->
         <SwitchPreferenceCompat
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="pref_notification_bar"
             android:summary="开启后可以从通知中心控制亮度"
             android:title="通知栏开关" />
