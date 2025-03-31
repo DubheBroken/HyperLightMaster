@@ -59,8 +59,8 @@ fun showNotification() {
     // 使用自定义布局构建通知内容
     val remoteViews = RemoteViews(LightApplication.instance.packageName, R.layout.custom_notification).apply {
         setProgressBar(R.id.progressBar,
-                       LightApplication.instance.lightViewModel.maxBrightnessValueFromLogic.value!!,//最大值
-                       LightApplication.instance.lightViewModel.brightness.value?:10,//当前值
+                       LightApplication.instance.lightViewModel.deviceState.maxBrightnessValueFromLogic.value!!,//最大值
+                       LightApplication.instance.lightViewModel.deviceState.brightness.value?:10,//当前值
                        false)//禁止滑动
         // 为进度条设置点击事件
         setOnClickPendingIntent(R.id.progressBar, progressPendingIntent)

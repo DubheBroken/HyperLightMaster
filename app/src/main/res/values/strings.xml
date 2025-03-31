@@ -3,4 +3,6 @@
     <string name="tab_light">亮度</string>
     <string name="tab_info">指南</string>
     <string name="tab_setting">设置</string>
+    <string name="cancel">取消</string>
+    <string name="ok">确定</string>
 </resources>

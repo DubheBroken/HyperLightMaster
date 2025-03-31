@@ -31,10 +31,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         // 【通知栏开关】事件处理
         val notificationSwitchPref = findPreference<SwitchPreferenceCompat>("pref_notification_bar")
-        notificationSwitchPref?.setDefaultValue(LightApplication.instance.lightViewModel.notifyOn.value)
-        LightApplication.instance.lightViewModel.notifyOn.observe(this){
-            notificationSwitchPref?.isChecked = it
-        }
+
         notificationSwitchPref?.setOnPreferenceChangeListener { _, newValue ->
             if (newValue == true) {
                 requestPermissions()
@@ -62,57 +59,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
         val maxBrightnessPref = findPreference<SeekBarPreference>("pref_max_brightness")//最大亮度设置控件
         val minBrightnessPref = findPreference<SeekBarPreference>("pref_min_brightness")//最小亮度设置控件
 
-        maxBrightnessPref?.max = LightApplication.instance.lightViewModel.MAX_BRIGHTNESS
-        maxBrightnessPref?.setDefaultValue(LightApplication.instance.lightViewModel.maxBrightnessValueFromLogic.value)
-
-        LightApplication.instance.lightViewModel.maxBrightnessValueFromLogic.observe(this,{
-            //逻辑最大亮度变化回调
-            maxBrightnessPref?.title = "最大亮度上限: $it"
-            maxBrightnessPref?.value = it
-
-            //同时更新最小亮度上限的最大值
-            minBrightnessPref?.max = it
-        })
-
-        // 【最大亮度上限】事件处理：滑动更改事件
-        maxBrightnessPref?.setOnPreferenceChangeListener { _, newValue ->
-            changeMax(newValue as Int)
-        }
-
-        // 点击后弹出输入对话框，允许直接输入数值
-        maxBrightnessPref?.setOnPreferenceClickListener {
-            showInputDialogForPreference("最大亮度上限", maxBrightnessPref.value) { inputValue ->
-                changeMax(inputValue)
-            }
-            true
-        }
-
-        // 【最小亮度下限】事件处理：滑动更改事件
-        maxBrightnessPref?.max = LightApplication.instance.lightViewModel.MAX_BRIGHTNESS
-        minBrightnessPref?.min = LightApplication.instance.lightViewModel.MIN_BRIGHTNESS
-        maxBrightnessPref?.setDefaultValue(LightApplication.instance.lightViewModel.minBrightnessValueFromLogic.value)
-
-        LightApplication.instance.lightViewModel.minBrightnessValueFromLogic.observe(this,{
-            //逻辑最小亮度变化回调
-            minBrightnessPref?.title = "最小亮度上限: $it"
-            minBrightnessPref?.value = it
-
-            //同时更新最大亮度上限的最小值
-            maxBrightnessPref?.min = it
-        })
-
-        minBrightnessPref?.setOnPreferenceChangeListener { _, newValue ->
-            changeMin(newValue as Int)
-        }
-
-        // 同时点击后弹出输入对话框，允许直接输入数值
-        minBrightnessPref?.setOnPreferenceClickListener {
-            showInputDialogForPreference("最小亮度下限", minBrightnessPref.value) { inputValue ->
-                changeMin(inputValue)
-            }
-            true
-        }
-
         // 联系作者点击事件：打开浏览器访问指定网址
         val contactAuthorPref = findPreference<Preference>("pref_contact_author")
         contactAuthorPref?.setOnPreferenceClickListener {
@@ -127,13 +73,77 @@ class SettingsFragment : PreferenceFragmentCompat() {
             true
         }
 
-        // 检查更新点击事件：打开浏览器访问更新页面，同时可动态更新 summary（例如当前版本号）
-        val checkUpdatePref = findPreference<Preference>("pref_check_update")
-        checkUpdatePref?.title = "当前版本：${BuildConfig.VERSION_NAME}"
-        checkUpdatePref?.setOnPreferenceClickListener {
+        // 【当前版本】点击事件：打开浏览器访问更新页面
+        val nowVersionPref = findPreference<Preference>("pref_now_version")
+        nowVersionPref?.title = "当前版本：${BuildConfig.VERSION_NAME}"
+        nowVersionPref?.setOnPreferenceClickListener {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/DubheBroken/HyperLightMaster/releases"))
             startActivity(intent)
             true
+        }
+
+        if (LightApplication.instance.isInit) {
+            // 【通知栏开关】事件处理
+            notificationSwitchPref?.setDefaultValue(LightApplication.instance.lightViewModel.notifyOn.value)
+            LightApplication.instance.lightViewModel.notifyOn.observe(this){
+                notificationSwitchPref?.isChecked = it
+            }
+
+            // 设置“最大亮度上限”的最大值
+            maxBrightnessPref?.max = LightApplication.instance.lightViewModel.deviceState.MAX_BRIGHTNESS
+            maxBrightnessPref?.setDefaultValue(LightApplication.instance.lightViewModel.deviceState.maxBrightnessValueFromLogic.value)
+
+            LightApplication.instance.lightViewModel.deviceState.maxBrightnessValueFromLogic.observe(this,{
+                //逻辑最大亮度变化回调
+                maxBrightnessPref?.title = "最大亮度上限: $it"
+                maxBrightnessPref?.value = it
+
+                //同时更新最小亮度上限的最大值
+                minBrightnessPref?.max = it
+            })
+
+            // 【最大亮度上限】事件处理：滑动更改事件
+            maxBrightnessPref?.setOnPreferenceChangeListener { _, newValue ->
+                changeMax(newValue as Int)
+            }
+
+            // 点击后弹出输入对话框，允许直接输入数值
+            maxBrightnessPref?.setOnPreferenceClickListener {
+                showInputDialogForPreference("最大亮度上限", maxBrightnessPref.value) { inputValue ->
+                    changeMax(inputValue)
+                }
+                true
+            }
+
+            // 【最小亮度下限】事件处理：滑动更改事件
+            maxBrightnessPref?.max = LightApplication.instance.lightViewModel.deviceState.MAX_BRIGHTNESS
+            minBrightnessPref?.min = LightApplication.instance.lightViewModel.deviceState.MIN_BRIGHTNESS
+            maxBrightnessPref?.setDefaultValue(LightApplication.instance.lightViewModel.deviceState.minBrightnessValueFromLogic.value)
+
+            LightApplication.instance.lightViewModel.deviceState.minBrightnessValueFromLogic.observe(this,{
+                //逻辑最小亮度变化回调
+                minBrightnessPref?.title = "最小亮度上限: $it"
+                minBrightnessPref?.value = it
+
+                //同时更新最大亮度上限的最小值
+                maxBrightnessPref?.min = it
+            })
+
+            minBrightnessPref?.setOnPreferenceChangeListener { _, newValue ->
+                changeMin(newValue as Int)
+            }
+
+            // 同时点击后弹出输入对话框，允许直接输入数值
+            minBrightnessPref?.setOnPreferenceClickListener {
+                showInputDialogForPreference("最小亮度下限", minBrightnessPref.value) { inputValue ->
+                    changeMin(inputValue)
+                }
+                true
+            }
+        } else {
+            notificationSwitchPref?.isEnabled = false
+            maxBrightnessPref?.isEnabled = false
+            minBrightnessPref?.isEnabled = false
         }
     }
 
@@ -145,13 +155,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
             Toast.makeText(context, "最小亮度不能低于10", Toast.LENGTH_SHORT).show()
             return false
         } else {
-            LightApplication.instance.lightViewModel.minBrightnessValueFromLogic.value = MIN
+            LightApplication.instance.lightViewModel.deviceState.minBrightnessValueFromLogic.value = MIN
             DataUtil.saveMinBrightnessValueFromLogic(MIN)
-            val nowBrightness = LightApplication.instance.lightViewModel.brightness.value
+            val nowBrightness = LightApplication.instance.lightViewModel.deviceState.brightness.value
             if (nowBrightness != null && nowBrightness < MIN) {
                 //如果修改后最小亮度比当前亮度高，刷新当前亮度
                 LightApplication.instance.lightViewModel.writeBrightness(MIN)
-                LightApplication.instance.lightViewModel.brightness.postValue(MIN)
+                LightApplication.instance.lightViewModel.deviceState.brightness.postValue(MIN)
             }
             return true
         }
@@ -161,17 +171,17 @@ class SettingsFragment : PreferenceFragmentCompat() {
      * 改变逻辑最大亮度
      */
     private fun changeMax(MAX: Int): Boolean {
-        if(MAX > LightApplication.instance.lightViewModel.MAX_BRIGHTNESS){
+        if(MAX > LightApplication.instance.lightViewModel.deviceState.MAX_BRIGHTNESS){
             Toast.makeText(context, "最大亮度上限不能超过系统最大亮度", Toast.LENGTH_SHORT).show()
             return false
         } else {
-            LightApplication.instance.lightViewModel.maxBrightnessValueFromLogic.value =MAX
+            LightApplication.instance.lightViewModel.deviceState.maxBrightnessValueFromLogic.value =MAX
             DataUtil.saveMaxBrightnessValueFromLogic(MAX)
-            val nowBrightness = LightApplication.instance.lightViewModel.brightness.value
+            val nowBrightness = LightApplication.instance.lightViewModel.deviceState.brightness.value
             if (nowBrightness != null && nowBrightness > MAX) {
                 //如果修改后最大亮度比当前亮度低，刷新当前亮度
                 LightApplication.instance.lightViewModel.writeBrightness(MAX)
-                LightApplication.instance.lightViewModel.brightness.postValue(MAX)
+                LightApplication.instance.lightViewModel.deviceState.brightness.postValue(MAX)
             }
             return true
         }

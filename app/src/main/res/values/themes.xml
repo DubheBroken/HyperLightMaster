@@ -31,6 +31,10 @@
         <item name="android:progressDrawable">@drawable/progressbar_hor</item>
     </style>
 
-    <color name="black3">#333333</color>
-    <color name="primary">#64B5F6</color>
+    <style name="centerDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
 </resources>

@@ -1,3 +1,6 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="width_ok_cancel_dialog">320dp</dimen>
+    <dimen name="height_ok_cancel_dialog">200dp</dimen>
+    <dimen name="dp_320">320dp</dimen>
 </resources>

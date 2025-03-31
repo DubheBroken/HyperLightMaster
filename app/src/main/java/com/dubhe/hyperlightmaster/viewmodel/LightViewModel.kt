@@ -1,43 +1,49 @@
-package com.dubhe.hyperlightmaster
+package com.dubhe.hyperlightmaster.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dubhe.hyperlightmaster.LightApplication
+import com.dubhe.hyperlightmaster.ViewModelEvent
 import com.dubhe.hyperlightmaster.util.DataUtil
+import com.dubhe.hyperlightmaster.util.SystemVersionUtil
 import com.dubhe.hyperlightmaster.util.cancelNotification
+import com.dubhe.hyperlightmaster.util.runShellCommand
 import com.dubhe.hyperlightmaster.util.showNotification
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.BufferedReader
-import java.io.InputStreamReader
 
 class LightViewModel : ViewModel() {
 
-    var brightness = MutableLiveData<Int>()
-    val MAX_BRIGHTNESS by lazy { readMaxBrightness() }//最大亮度，从系统读
-    var maxBrightnessValueFromLogic = MutableLiveData(MAX_BRIGHTNESS) //亮度条的最大亮度上限，用户定义
-    var MIN_BRIGHTNESS = 10//最小亮度，降到0会完全黑掉
-    var minBrightnessValueFromLogic = MutableLiveData(MIN_BRIGHTNESS)//亮度条的最小亮度下限，用户定义
-    var autoBrightness = MutableLiveData(false)//自动亮度开关
+    //    var brightness = MutableLiveData<Int>()
+//    val MAX_BRIGHTNESS by lazy { readMaxBrightness() }//最大亮度，从系统读
+//    var maxBrightnessValueFromLogic = MutableLiveData(MAX_BRIGHTNESS) //亮度条的最大亮度上限，用户定义
+//    var MIN_BRIGHTNESS = 10//最小亮度，降到0会完全黑掉
+//    var minBrightnessValueFromLogic = MutableLiveData(MIN_BRIGHTNESS)//亮度条的最小亮度下限，用户定义
+//    var autoBrightness = MutableLiveData(false)//自动亮度开关
     var notifyOn = MutableLiveData(false)//通知栏开关
+
+    val deviceState by lazy {
+        val dir = SystemVersionUtil.getLightDeviceDirByModel()
+        DeviceState(MAX_BRIGHTNESS = readMaxBrightness(dir), deviceDir = dir)
+    }
 
     init {
         var max = DataUtil.getMaxBrightnessValueFromLogic()
         if (max < 0) {
-            max = MAX_BRIGHTNESS
+            max = deviceState.MAX_BRIGHTNESS
         }
-        maxBrightnessValueFromLogic.postValue(max)
+        deviceState.maxBrightnessValueFromLogic.postValue(max)
 
         var min = DataUtil.getMinBrightnessValueFromLogic()
-        if (min < MIN_BRIGHTNESS) {
-            min = MIN_BRIGHTNESS
+        if (min < deviceState.MIN_BRIGHTNESS) {
+            min = deviceState.MIN_BRIGHTNESS
         }
-        minBrightnessValueFromLogic.postValue(min)
+        deviceState.minBrightnessValueFromLogic.postValue(min)
         notifyOn.postValue(DataUtil.getNotificationBarSwitch())
 
-        brightness.postValue(readBrightness())
+        deviceState.brightness.postValue(readBrightness())
 
         val app = LightApplication.instance
         viewModelScope.launch {
@@ -56,18 +62,21 @@ class LightViewModel : ViewModel() {
                             }
                         }
                     }
+
                     is ViewModelEvent.AutoBrightness -> {
                         withContext(Dispatchers.IO) {
                             //开/关 自动亮度
 
                         }
                     }
+
                     is ViewModelEvent.ReadBrightness -> {
                         withContext(Dispatchers.IO) {
                             //读取当前亮度
-                            brightness.postValue(readBrightness())
+                            deviceState.brightness.postValue(readBrightness())
                         }
                     }
+
                     is ViewModelEvent.WriteBrightness -> {
                         withContext(Dispatchers.IO) {
                             //调整亮度
@@ -82,9 +91,8 @@ class LightViewModel : ViewModel() {
     /**
      * 获取系统最大亮度
      */
-    private fun readMaxBrightness(): Int {
-        val output =
-            runShellCommand("cat /sys/class/backlight/panel0-backlight/max_brightness")
+    private fun readMaxBrightness(dir: String? = null): Int {
+        val output = runShellCommand("cat ${dir ?: deviceState.deviceDir}max_brightness")
         return output.toIntOrNull() ?: 0
     }
 
@@ -92,8 +100,7 @@ class LightViewModel : ViewModel() {
      * 获取当前亮度
      */
     fun readBrightness(): Int {
-        val output =
-            runShellCommand("cat /sys/class/backlight/panel0-backlight/brightness")
+        val output = runShellCommand("cat ${deviceState.deviceDir}brightness")
         return output.toIntOrNull() ?: 0
     }
 
@@ -101,30 +108,18 @@ class LightViewModel : ViewModel() {
      * 设置亮度
      */
     fun writeBrightness(value: Int) {
-        runShellCommand("echo $value > /sys/class/backlight/panel0-backlight/brightness")
+        runShellCommand("echo $value > ${deviceState.deviceDir}brightness")
     }
 
-    private fun runShellCommand(command: String): String {
-        val process = Runtime.getRuntime().exec(arrayOf("su", "-c", command))
-        val reader = BufferedReader(InputStreamReader(process.inputStream))
-        val result = StringBuilder()
-        var line: String?
-
-        while (reader.readLine().also { line = it } != null) {
-            result.append(line).append("\n")
-        }
-
-        reader.close()
-        process.waitFor()
-        return result.toString().trim()
-    }
-    
+    /**
+     * 检查亮度范围是否合法
+     */
     fun checkBrightness(brightness: Int): Int {
         var br = brightness
-        if (maxBrightnessValueFromLogic.value != null && br > maxBrightnessValueFromLogic.value!!) {
-            br = maxBrightnessValueFromLogic.value!!
-        } else if (minBrightnessValueFromLogic.value != null && br < minBrightnessValueFromLogic.value!!) {
-            br = minBrightnessValueFromLogic.value!!
+        if (deviceState.maxBrightnessValueFromLogic.value != null && br > deviceState.maxBrightnessValueFromLogic.value!!) {
+            br = deviceState.maxBrightnessValueFromLogic.value!!
+        } else if (deviceState.minBrightnessValueFromLogic.value != null && br < deviceState.minBrightnessValueFromLogic.value!!) {
+            br = deviceState.minBrightnessValueFromLogic.value!!
         }
         return br
     }
