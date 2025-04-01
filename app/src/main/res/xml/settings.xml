@@ -44,6 +44,14 @@
             android:summary="开启后快捷图块将根据设置的亮度上限和下限进行调整"
             android:title="对快捷图块生效" />
 
+        <ListPreference
+            android:key="pref_lock_brightness_mode"
+            android:title="亮度锁定方案"
+            android:summary="使用前一定要看指南"
+            android:defaultValue="-1"
+            android:entries="@array/lock_brightness_entries"
+            android:entryValues="@array/lock_brightness_values" />
+
     </PreferenceCategory>
 
     <!-- 显示相关设置 -->

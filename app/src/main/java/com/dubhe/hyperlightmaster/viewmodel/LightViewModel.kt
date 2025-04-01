@@ -108,7 +108,30 @@ class LightViewModel : ViewModel() {
      * 设置亮度
      */
     fun writeBrightness(value: Int) {
-        runShellCommand("echo $value > ${deviceState.deviceDir}brightness")
+        setWriteable()
+        runShellCommand("echo $value > ${getBrightnessPath()}")
+
+        if (DataUtil.getLockBrightnessMode() == DataUtil.MMKVValue.LOCK_BRIGHTNESS_READ_ONLY) {//设为只读
+            setReadOnly()
+        }
+    }
+
+    private fun getBrightnessPath(): String {
+        return "${deviceState.deviceDir}brightness"
+    }
+
+    /**
+     * 把文件标记为只读来锁定亮度
+     */
+    fun setReadOnly(){
+        runShellCommand("chmod 444 ${getBrightnessPath()}")
+    }
+
+    /**
+     * 文件标记为允许写入
+     */
+    fun setWriteable(){
+        runShellCommand("chmod 644 ${getBrightnessPath()}")
     }
 
     /**

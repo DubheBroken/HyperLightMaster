@@ -8,10 +8,10 @@
 
     <application
         android:name=".LightApplication"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:icon="@mipmap/ic_launcher"
-        android:theme="@style/Theme.HyperLightMaster"
+        android:theme="@style/Theme.HyperLightMaster.NoActionBar"
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"
@@ -23,7 +23,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <receiver android:name=".receiver.NotificationActionReceiver" />
+        <receiver
+            android:name=".receiver.ScreenOnReceiver"
+            android:exported="true">
+            <intent-filter>
+                <category android:name="android.intent.action.SCREEN_ON" />
+            </intent-filter>
+        </receiver>
+
         <service
             android:name=".service.MaxLightTileService"
             android:exported="true"

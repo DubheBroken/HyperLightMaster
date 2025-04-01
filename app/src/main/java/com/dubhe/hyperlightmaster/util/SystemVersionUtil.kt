@@ -33,11 +33,11 @@ object SystemVersionUtil {
      */
     fun getLightDeviceDirByModel(): String {
         when (readBrightness().trim().uppercase()) {
-            Mi12s, MixFold2 -> {
+            Mi12s_CN, MixFold2_CN, Note13Pro_CN -> {
                 return "/sys/class/backlight/panel0-backlight/"
             }
 
-            NOTE13_5G -> {
+            NOTE13_5G_CN -> {
                 return "/sys/class/leds/lcd-backlight/"
             }
 
@@ -60,13 +60,15 @@ object SystemVersionUtil {
      * /sys/class/backlight/panel0-backlight
      */
     const val Mi11u = ""
-    const val Mi12s = "2206123SC"
-    const val MixFold2 = "22061218C"
+    const val Mi12s_CN = "2206123SC"
+    const val MixFold2_CN = "22061218C"
     const val K50u_Mi12TPro = ""
+    const val Note13Pro_CN = "2312DRA50C"
+    const val Note13Pro_CN2 = "2312CRAD3C"
 
     /**
      * /sys/class/leds/lcd-backlight
      */
-    const val NOTE13_5G = "2312DRAABC"
+    const val NOTE13_5G_CN = "2312DRAABC"
 
 }

@@ -10,4 +10,17 @@
         <item>light</item>
         <item>dark</item>
     </string-array>
+
+    <string-array name="lock_brightness_entries">
+        <item>关闭</item>
+        <item>只读</item>
+        <item>接收广播</item>
+    </string-array>
+
+    <string-array name="lock_brightness_values">
+        <item>-1</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
 </resources>

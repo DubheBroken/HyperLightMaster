@@ -4,15 +4,15 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <TextView
+            android:id="@+id/text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
             android:text="先占个位置以后再写"
-            android:textSize="40sp" />
+            android:textSize="18sp" />
 
     </LinearLayout>
 </layout>

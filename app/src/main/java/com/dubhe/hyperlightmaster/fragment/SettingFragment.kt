@@ -82,6 +82,37 @@ class SettingsFragment : PreferenceFragmentCompat() {
             true
         }
 
+        // 【亮度锁定方案】事件处理（下拉选单）
+        val lockModePref = findPreference<ListPreference>("pref_lock_brightness_mode")
+        lockModePref?.setDefaultValue(DataUtil.getLockBrightnessMode().toString())
+        lockModePref?.value = DataUtil.getLockBrightnessMode().toString()
+        lockModePref?.setOnPreferenceChangeListener { _, newValue ->
+            (newValue as? String)?.toIntOrNull()?.let {
+                DataUtil.saveLockBrightnessMode(it)
+                when (it) {
+                    DataUtil.MMKVValue.LOCK_BRIGHTNESS_RECEIVER -> {
+                        //开启广播
+                        LightApplication.instance.registerScreenOnReceiver()
+
+                        LightApplication.instance.lightViewModel.setWriteable()
+                    }
+
+                    DataUtil.MMKVValue.LOCK_BRIGHTNESS_READ_ONLY -> {
+                        //只读文件
+                        LightApplication.instance.lightViewModel.setReadOnly()
+
+                        LightApplication.instance.unregisterScreenOnReceiver()
+                    }
+
+                    else -> {
+                        LightApplication.instance.unregisterScreenOnReceiver()
+                        LightApplication.instance.lightViewModel.setWriteable()
+                    }
+                }
+            }
+            true
+        }
+
         if (LightApplication.instance.isInit) {
             // 【通知栏开关】事件处理
             notificationSwitchPref?.setDefaultValue(LightApplication.instance.lightViewModel.notifyOn.value)
