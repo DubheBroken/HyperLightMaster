@@ -12,6 +12,7 @@ import java.io.InputStreamReader
  * @return 执行结果
  */
 fun runShellCommand(command: String): String {
+    Log.d("CMD","执行指令: $command")
     val process = Runtime.getRuntime().exec(arrayOf("su", "-c", command))
     val reader = BufferedReader(InputStreamReader(process.inputStream))
     val result = StringBuilder()

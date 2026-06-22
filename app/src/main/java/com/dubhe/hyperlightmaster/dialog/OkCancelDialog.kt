@@ -35,12 +35,10 @@ class OkCancelDialog(var mContext: Context, var cancelAble: Boolean = true) :
         window!!.setBackgroundDrawable(ColorDrawable(0))
         window.setGravity(Gravity.CENTER)
         val lp = window.attributes
-        //设置宽
         lp.width = context.resources.getDimensionPixelOffset(R.dimen.width_ok_cancel_dialog)
-        //设置高
         lp.height = context.resources.getDimensionPixelOffset(R.dimen.height_ok_cancel_dialog)
         window.attributes = lp
-        window.setBackgroundDrawable(ColorDrawable(0))
+        window.setBackgroundDrawableResource(android.R.color.transparent)
         initView()
         setCanceledOnTouchOutside(cancelAble)
         setCancelable(cancelAble)

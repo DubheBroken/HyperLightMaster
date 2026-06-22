@@ -12,6 +12,8 @@ object DataUtil {
             const val MIN_BRIGHTNESS_VALUE_FROM_LOGIC = "MIN_BRIGHTNESS_VALUE_FROM_LOGIC" //亮度条的最小亮度下限，用户定义
             const val MIN_MAX_SETUP_QUICK_TILE = "MIN_MAX_SETUP_QUICK_TILE"//快捷图块最大最小值限制开关
             const val LOCK_BRIGHTNESS_MODE = "LOCK_BRIGHTNESS_MODE"//锁定亮度方式
+            const val THEME_COLOR = "THEME_COLOR"//自定义主题色 ARGB
+            const val MONET_ENABLED = "MONET_ENABLED"//莫奈取色开关
         }
     }
 
@@ -69,6 +71,23 @@ object DataUtil {
 
     fun saveLockBrightnessMode(value: Int){
         saveIntData(MMKVKey.LOCK_BRIGHTNESS_MODE, value)
+    }
+
+    fun saveThemeColor(color: Int) {
+        saveIntData(MMKVKey.THEME_COLOR, color)
+    }
+
+    fun getThemeColor(): Int {
+        return getIntData(MMKVKey.THEME_COLOR, -1)
+    }
+
+    fun saveMonetEnabled(enabled: Boolean) {
+        saveBooleanData(MMKVKey.MONET_ENABLED, enabled)
+    }
+
+    fun getMonetEnabled(): Boolean {
+//        return getBooleanData(MMKVKey.MONET_ENABLED, true)
+        return true
     }
 
     private fun saveBooleanData(key: String, value: Boolean) {

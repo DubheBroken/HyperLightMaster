@@ -1,43 +1,19 @@
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@android:id/background">
-        <shape >
+        <shape>
             <corners android:radius="50dip" />
-            <gradient
-                android:angle="0"
-                android:centerY="0.75"
-                android:endColor="#F5F5F5"
-                android:startColor="#F5F5F5" />
+            <solid android:color="@color/md3_surface_container_highest" />
         </shape>
     </item>
 
     <item android:id="@android:id/progress">
         <scale
             android:scaleGravity="start"
-            android:scaleWidth="100%"
-            >
+            android:scaleWidth="100%">
             <shape>
                 <corners android:radius="50dip" />
-                <gradient
-                    android:angle="0"
-                    android:centerY="0.75"
-                    android:endColor="#00CCFF"
-                    android:startColor="#9DF0FF" />
+                <solid android:color="@color/md3_primary" />
             </shape>
         </scale>
-        <!--scale和clip只能二选一，一种是缩放一种是切割方式，进度条末端形状不同-->
-        <!-- <clip
-             android:gravity="bottom"
-             android:clipOrientation="vertical"
-             >
-             <shape >
-                 <corners android:radius="50dip" />
-                 <gradient
-                     android:angle="270"
-                     android:centerY="0.75"
-                     android:endColor="#165CBC"
-                     android:startColor="#85B0E9" />
-             </shape>
-         </clip>-->
-
     </item>
 </layer-list>

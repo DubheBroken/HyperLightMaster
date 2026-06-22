@@ -31,13 +31,13 @@ class LightViewModel : ViewModel() {
 
     init {
         var max = DataUtil.getMaxBrightnessValueFromLogic()
-        if (max < 0) {
+        if (max < 0 || max <= deviceState.MIN_BRIGHTNESS) {
             max = deviceState.MAX_BRIGHTNESS
         }
         deviceState.maxBrightnessValueFromLogic.postValue(max)
 
         var min = DataUtil.getMinBrightnessValueFromLogic()
-        if (min < deviceState.MIN_BRIGHTNESS) {
+        if (min < deviceState.MIN_BRIGHTNESS || min >= deviceState.MAX_BRIGHTNESS) {
             min = deviceState.MIN_BRIGHTNESS
         }
         deviceState.minBrightnessValueFromLogic.postValue(min)

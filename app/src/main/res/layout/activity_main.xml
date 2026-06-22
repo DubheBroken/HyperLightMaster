@@ -6,8 +6,7 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingTop="?attr/actionBarSize">
+        android:orientation="vertical">
 
         <fragment
             android:id="@+id/nav_host_fragment_activity_main"
@@ -18,20 +17,14 @@
             app:defaultNavHost="true"
             app:navGraph="@navigation/mobile_navigation" />
 
-        <View
-            android:layout_width="match_parent"
-            android:background="@color/gray9"
-            android:layout_height="1px"/>
-
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/nav_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:background="?android:attr/windowBackground"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            android:background="?attr/colorSurface"
+            app:labelVisibilityMode="labeled"
+            app:itemActiveIndicatorStyle="@style/Md3BottomNavActiveIndicator"
             app:menu="@menu/bottom_nav_menu" />
 
     </LinearLayout>

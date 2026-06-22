@@ -34,15 +34,15 @@ class ChangeLightFragment : BaseFragment<FragmentChangeLightBinding>() {
             return
         }
         viewModel.deviceState.brightness.observe(this) {
-            dataBinding.textLight.text = "当前亮度: $it"
+            dataBinding.textLight.text = it.toString()
             dataBinding.progressBar.progress = it
         }
 
         viewModel.deviceState.maxBrightnessValueFromLogic.observe(this){
             dataBinding.progressBar.max = it
-            dataBinding.textLightMax.text = "最大亮度: ${LightApplication.instance.lightViewModel.deviceState.maxBrightnessValueFromLogic.value}"
+            dataBinding.textLightMax.text = "${LightApplication.instance.lightViewModel.deviceState.maxBrightnessValueFromLogic.value}"
             viewModel.deviceState.brightness.value?.let {
-                dataBinding.progressBar.progress = it// 刷新一下进度条渲染
+                dataBinding.progressBar.progress = it
             }
         }
         viewModel.deviceState.minBrightnessValueFromLogic.observe(this){

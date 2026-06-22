@@ -68,6 +68,7 @@ class LightApplication : Application() {
     fun unregisterScreenOnReceiver() {
         if (isRegister) {
             unregisterReceiver(screenOnReceiver)
+            isRegister = false
         }
     }
 

@@ -37,12 +37,10 @@ class OkDialog(var mContext: Context) : Dialog(mContext, R.style.centerDialog) {
         window!!.setBackgroundDrawable(ColorDrawable(0))
         window.setGravity(Gravity.CENTER)
         val lp = window.attributes
-        //设置宽
         lp.width = context.resources.getDimensionPixelOffset(R.dimen.dp_320)
-        //设置高
         lp.height = ActionBar.LayoutParams.WRAP_CONTENT
         window.attributes = lp
-        window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        window.setBackgroundDrawableResource(android.R.color.transparent)
         initView()
         setCanceledOnTouchOutside(false)
     }
