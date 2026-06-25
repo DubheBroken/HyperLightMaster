@@ -38,17 +38,17 @@ class ChangeLightFragment : BaseFragment<FragmentChangeLightBinding>() {
             dataBinding.progressBar.progress = it
         }
 
-        viewModel.deviceState.maxBrightnessValueFromLogic.observe(this){
+        viewModel.deviceState.maxBrightnessValueFromLogic.observe(this) {
             dataBinding.progressBar.max = it
             dataBinding.textLightMax.text = "${LightApplication.instance.lightViewModel.deviceState.maxBrightnessValueFromLogic.value}"
             viewModel.deviceState.brightness.value?.let {
                 dataBinding.progressBar.progress = it
             }
         }
-        viewModel.deviceState.minBrightnessValueFromLogic.observe(this){
+        viewModel.deviceState.minBrightnessValueFromLogic.observe(this) {
             dataBinding.progressBar.min = it
             viewModel.deviceState.brightness.value?.let {
-                dataBinding.progressBar.progress = it// 刷新一下进度条渲染
+                dataBinding.progressBar.progress = it
             }
         }
 
@@ -58,13 +58,11 @@ class ChangeLightFragment : BaseFragment<FragmentChangeLightBinding>() {
         }
     }
 
-    // 根据滑动距离调整进度
     private fun adjustProgress(distanceY: Float) {
         val currentProgress = dataBinding.progressBar.progress
         val maxProgress = dataBinding.progressBar.max
 
-        // 上滑 distanceY 为负数，下滑为正数，所以需要反向
-        val progressChange = (0 - distanceY).toInt() * 2 // 根据需要调整滑动速度
+        val progressChange = (0 - distanceY).toInt() * 2
         var newProgress = (currentProgress - progressChange).coerceIn(viewModel.deviceState.MIN_BRIGHTNESS, maxProgress)
 
         newProgress = viewModel.checkBrightness(newProgress)

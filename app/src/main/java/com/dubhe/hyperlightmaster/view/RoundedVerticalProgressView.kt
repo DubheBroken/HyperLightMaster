@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Paint
+import android.graphics.Path
 import android.graphics.RectF
 import android.graphics.Shader
 import android.util.AttributeSet
@@ -51,6 +52,9 @@ class RoundedVerticalProgressView @JvmOverloads constructor(
         resources.getDimension(R.dimen.progress_corner_radius)
     }
 
+    private val bottomPath = Path()
+    private val topPath = Path()
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val w = width.toFloat()
@@ -61,26 +65,49 @@ class RoundedVerticalProgressView @JvmOverloads constructor(
         rect.set(0f, 0f, w, h)
         canvas.drawRoundRect(rect, r, r, trackPaint)
 
-        if (progress <= min) return
-
         val totalRange = (max - min).coerceAtLeast(1)
         val fraction = (progress - min).toFloat() / totalRange
-        val progressHeight = (h * fraction).coerceAtLeast(r * 2f)
+        val middleHeight = (h - 2f * r) * fraction
+        val totalProgressHeight = 2f * r + middleHeight
 
-        val top = h - progressHeight
+        if (totalProgressHeight <= 0f) return
 
         val deepColor = ThemeColorManager.resolvePrimaryColor(context)
         val lightColor = ThemeColorManager.generateLighterShade(deepColor)
 
         val gradient = LinearGradient(
             0f, h,
-            0f, top,
+            0f, h - totalProgressHeight,
             intArrayOf(deepColor, lightColor),
             null,
             Shader.TileMode.CLAMP
         )
         progressPaint.shader = gradient
-        rect.set(0f, top, w, h)
-        canvas.drawRoundRect(rect, r, r, progressPaint)
+
+        val bottomY = h - totalProgressHeight
+
+        if (middleHeight <= 0f) {
+            rect.set(0f, bottomY, w, h)
+            canvas.drawRoundRect(rect, r, r, progressPaint)
+            return
+        }
+
+        bottomPath.reset()
+        bottomPath.addRoundRect(
+            0f, h - r, w, h,
+            floatArrayOf(0f, 0f, 0f, 0f, r, r, r, r),
+            Path.Direction.CW
+        )
+        canvas.drawPath(bottomPath, progressPaint)
+
+        canvas.drawRect(0f, bottomY + r, w, h - r, progressPaint)
+
+        topPath.reset()
+        topPath.addRoundRect(
+            0f, bottomY, w, bottomY + r,
+            floatArrayOf(r, r, r, r, 0f, 0f, 0f, 0f),
+            Path.Direction.CW
+        )
+        canvas.drawPath(topPath, progressPaint)
     }
 }
